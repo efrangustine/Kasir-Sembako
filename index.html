@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Kasir Sembako – Iteratif</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(120deg, #fce7f3, #e0e7ff);
+    padding: 40px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    background: #ffffffcc;
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+h1 {
+    text-align: center;
+    color: #6d28d9;
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #c7d2fe;
+    font-size: 14px;
+}
+
+button {
+    background: #a78bfa;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #7c3aed;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+th {
+    background: #ede9fe;
+}
+
+.result {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #1f2933;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>🛒 Kasir Sembako (Iteratif)</h1>
+
+<p><b>Format data:</b><br>
+Nama Barang | Jumlah | Harga
+</p>
+
+<textarea id="dataInput" placeholder="Contoh:
+Beras Ramos | 12000 | 5
+Minyak Bimoli | 18000 | 2
+Gula Pasir | 14000 | 3"></textarea>
+
+<button onclick="proses()">Proses Data</button>
+
+<table id="tabel">
+<thead>
+<tr>
+<th>No</th>
+<th>Nama Barang</th>
+<th>Jumlah</th>
+<th>Harga</th>
+<th>Subtotal</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+<div class="result" id="hasil"></div>
+</div>
+
+<script>
+function proses() {
+    const input = document.getElementById("dataInput").value.trim().split("\n");
+    const tbody = document.querySelector("#tabel tbody");
+    tbody.innerHTML = "";
+
+    let total = 0;
+
+    const start = performance.now();
+
+    // Ulangi 1000x agar waktu terlihat
+    for (let loop = 0; loop < 1000; loop++) {
+        total = 0;
+        for (let i = 0; i < input.length; i++) {
+            const [nama, harga, jumlah] = input[i].split("|").map(x => x.trim());
+            total += parseInt(harga) * parseInt(jumlah);
+        }
+    }
+
+    const end = performance.now();
+
+    // Tampilkan tabel sekali saja
+    input.forEach((row, i) => {
+        const [nama, harga, jumlah] = row.split("|").map(x => x.trim());
+        const subtotal = harga * jumlah;
+
+        tbody.innerHTML += `
+        <tr>
+            <td>${i+1}</td>
+            <td>${nama}</td>
+            <td>${harga}</td>
+            <td>${jumlah}</td>
+            <td>${subtotal}</td>
+        </tr>`;
+    });
+
+    document.getElementById("hasil").innerHTML = `
+        <b>Total Belanja:</b> Rp ${total.toLocaleString()} <br>
+        <b>Waktu Proses:</b> ${((end-start)/1000).toFixed(3)} ms
+    `;
+}
+</script>
+
+</body>
+</html>
